@@ -18,9 +18,11 @@ public class DATA03Items : IMordorDataFile
         {
             _count = value;
             if (ItemList.Length == 0)
+            {
                 ItemList = new Item[value];
+            }
         }
     }
 
-    public Item[] ItemList { get; set; } = { };
+    public Item[] ItemList { get; set; } = [];
 }

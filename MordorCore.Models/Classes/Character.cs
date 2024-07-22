@@ -2,8 +2,8 @@
 
 public class Character
 {
-    [FixedLengthString(Length = 30)]
     [NewRecord]
+    [FixedLengthString(Length = 30)]
     public string Name { get; set; } = null!;
     
     public short Race { get; set; }

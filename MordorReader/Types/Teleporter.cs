@@ -11,7 +11,9 @@ public class Teleporter
     public override string ToString()
     {
         if (x2 == 0 || y2 == 0 || z2 == 0)
+        {
             return $"({x}, {y}) => Random";
+        }
         return $"({x}, {y}) => ({x2}, {y2}, {z2})";
     }
 }

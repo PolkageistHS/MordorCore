@@ -66,4 +66,7 @@ public class Monster
     public short ItemDropLevel { get; set; }
     
     public short ItemChance { get; set; }
+
+    /// <inheritdoc />
+    public override string ToString() => $"{Name} : {ID}";
 }

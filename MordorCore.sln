@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MordorCore.Models", "Mordor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MordorCore.DAL", "MordorCore.DAL\MordorCore.DAL.csproj", "{4BA70B3E-2DEB-40D0-A8F0-8833AD2B4023}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MordorReader", "MordorReader\MordorReader.csproj", "{1677ECFF-761A-40FD-8FC2-1712E1EC66A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4BA70B3E-2DEB-40D0-A8F0-8833AD2B4023}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BA70B3E-2DEB-40D0-A8F0-8833AD2B4023}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BA70B3E-2DEB-40D0-A8F0-8833AD2B4023}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1677ECFF-761A-40FD-8FC2-1712E1EC66A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1677ECFF-761A-40FD-8FC2-1712E1EC66A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1677ECFF-761A-40FD-8FC2-1712E1EC66A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1677ECFF-761A-40FD-8FC2-1712E1EC66A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

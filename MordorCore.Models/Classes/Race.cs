@@ -20,4 +20,6 @@ public class Race
     public short MaxAge { get; set; } 
     
     public float ExpFactor { get; set; } 
+
+    public override string ToString() => Name;
 }

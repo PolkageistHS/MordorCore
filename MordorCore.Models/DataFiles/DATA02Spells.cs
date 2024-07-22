@@ -15,9 +15,11 @@ public class DATA02Spells : IMordorDataFile
         {
             _count = value;
             if (Spells.Length == 0)
+            {
                 Spells = new Spell[value];
+            }
         }
     }
 
-    public Spell[] Spells { get; set; } = { };
+    public Spell[] Spells { get; set; } = [];
 }

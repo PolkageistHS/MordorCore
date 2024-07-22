@@ -12,7 +12,99 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.CodeDom" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MordorCore.DAL\MordorCore.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Gen\AccessoryGen.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>AccessoryGen.cs</LastGenOutput>
+    </None>
+    <None Update="Gen\ArmorGen.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ArmorGen.cs</LastGenOutput>
+    </None>
+    <None Update="Gen\ConsumableGen.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ConsumableGen.cs</LastGenOutput>
+    </None>
+    <None Update="Gen\MonsterGen.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>MonsterGen.cs</LastGenOutput>
+    </None>
+    <None Update="Gen\OtherIdGen.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>OtherIdGen.cs</LastGenOutput>
+    </None>
+    <None Update="Gen\SigilGen.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>SigilGen.cs</LastGenOutput>
+    </None>
+    <None Update="Gen\SpellGen.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>SpellGen.cs</LastGenOutput>
+    </None>
+    <None Update="Gen\WeaponGen.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>WeaponGen.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="MordorCore.DAL" />
+    <Using Include="MordorCore.Models.Classes" />
+    <Using Include="MordorCore.Models.DataFiles" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Gen\AccessoryGen.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AccessoryGen.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Gen\ArmorGen.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ArmorGen.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Gen\ConsumableGen.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ConsumableGen.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Gen\MonsterGen.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MonsterGen.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Gen\OtherIdGen.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OtherIdGen.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Gen\SigilGen.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SigilGen.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Gen\SpellGen.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SpellGen.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Gen\WeaponGen.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WeaponGen.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

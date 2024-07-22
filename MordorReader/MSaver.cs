@@ -1,6 +1,3 @@
 ﻿namespace MordorReader;
 
-public class MSaver
-{
-	
-}
+public class MSaver;

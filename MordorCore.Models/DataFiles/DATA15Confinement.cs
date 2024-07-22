@@ -18,9 +18,11 @@ public class DATA15Confinement : IMordorDataFile
         {
             _totalRecords = value;
             if (Monsters.Length == 0)
+            {
                 Monsters = new ConfinementMonster[value];
+            }
         }
     }
 
-    public ConfinementMonster[] Monsters { get; set; } = { };
+    public ConfinementMonster[] Monsters { get; set; } = [];
 }

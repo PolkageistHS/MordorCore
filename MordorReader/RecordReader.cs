@@ -23,7 +23,9 @@ public sealed class RecordReader : IDisposable
         _buffer = new byte[bufferLength];
         _file = new FileStream(filename, FileMode.Open);
         if (_file == null)
+        {
             throw new Exception("Unable to open file!");
+        }
     }
 
     private void CheckLength(int length)
@@ -34,16 +36,23 @@ public sealed class RecordReader : IDisposable
     public bool Read()
     {
         _cursor = 0;
-        if (_bufferLength == 0) return false;
+        if (_bufferLength == 0)
+        {
+            return false;
+        }
         return _file.Read(_buffer, 0, _bufferLength) > 0;
     }
 
     public void Seek(long recnum)
     {
         if (_bufferLength == 0)
+        {
             _file.Seek(recnum, SeekOrigin.Begin);
+        }
         else
+        {
             _file.Seek((recnum - 1)* _bufferLength, SeekOrigin.Begin);
+        }
     }
 
     private uint GetUint()
@@ -51,7 +60,9 @@ public sealed class RecordReader : IDisposable
         CheckLength(4);
         uint var = 0;
         for (int i = 0; i < 4; i++)
+        {
             var = (var << 8) + _buffer[_cursor + 3 - i];
+        }
         _cursor += 4;
         return var;
     }
@@ -59,7 +70,9 @@ public sealed class RecordReader : IDisposable
     public short? GetShortIfItExists()
     {
         if (_cursor + 2 > _bufferLength)
+        {
             return null;
+        }
         return GetShort();
     }
 
@@ -78,7 +91,9 @@ public sealed class RecordReader : IDisposable
         ulong u = 0;
         CheckLength(8);
         for (int i = 0; i < 8; i++)
+        {
             u = (u << 8) + _buffer[_cursor + 7 - i];
+        }
         _cursor += 8;
         return (long)u;
     }
@@ -93,7 +108,9 @@ public sealed class RecordReader : IDisposable
     public string GetString(ushort length = 0)
     {
         if (length == 0)
+        {
             length = (ushort)GetShort();
+        }
         CheckLength(length);
         string str = Encoding.UTF8.GetString(_buffer, (int)_cursor, length);
         _cursor += length;

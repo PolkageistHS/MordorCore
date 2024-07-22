@@ -29,7 +29,7 @@ public class Item
     
     public short Charges { get; set; }
     
-    public short SubTypeID { get; set; }
+    public short TypeID { get; set; }
     
     public int Guilds { get; set; }
     
@@ -41,7 +41,7 @@ public class Item
     
     public short Hands { get; set; }
     
-    public short Type { get; set; }
+    public short SubtypeID { get; set; }
     
     public int ResistanceFlags { get; set; }
 
@@ -54,4 +54,6 @@ public class Item
     public short SpellLvl { get; set; }
     
     public short ClassRestricted { get; set; }
+
+    public override string ToString() => $"{Name} : {ID}";
 }

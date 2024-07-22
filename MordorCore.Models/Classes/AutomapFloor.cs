@@ -2,7 +2,7 @@
 
 public class AutomapFloor
 {
-    [SkipRecord]
+    [SkipProperty]
     public short FloorNumber { get; set; }
 
     [NewRecord]

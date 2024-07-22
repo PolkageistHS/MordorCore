@@ -1,5 +1,3 @@
 ﻿namespace MordorReader;
 
-public class RecordWriter
-{
-}
+public class RecordWriter;

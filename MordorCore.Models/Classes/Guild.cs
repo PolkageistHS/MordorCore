@@ -46,4 +46,6 @@ public class Guild
     public short Unused3 { get; set; }
     
     public short Unused4 { get; set; }
+
+    public override string ToString() => Name;
 }

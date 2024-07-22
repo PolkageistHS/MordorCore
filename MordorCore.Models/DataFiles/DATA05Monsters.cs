@@ -19,9 +19,11 @@ public class DATA05Monsters : IMordorDataFile
         {
             _count = value;
             if (MonstersList.Length == 0)
+            {
                 MonstersList = new Monster[value];
+            }
         }
     }
 
-    public Monster[] MonstersList { get; set; } = { };
+    public Monster[] MonstersList { get; set; } = [];
 }

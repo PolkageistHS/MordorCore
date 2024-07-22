@@ -6,4 +6,6 @@ public class ItemType
     public string Name { get; set; } = null!;
 
     public short IsEquippable { get; set; }
+
+    public override string ToString() => Name;
 }

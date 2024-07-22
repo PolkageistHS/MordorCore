@@ -28,11 +28,17 @@ public static class MLoader
             reader.Read();
             race.Name = reader.GetString();
             for (int j = 0; j < race.MinStats.Length; j++)
+            {
                 race.MinStats[j] = reader.GetShort();
+            }
             for (int j = 0; j < race.MaxStats.Length; j++)
+            {
                 race.MaxStats[j] = reader.GetShort();
+            }
             for (int j = 0; j < race.Resistances.Length; j++)
+            {
                 race.Resistances[j] = reader.GetShort();
+            }
             race._alignment = reader.GetInt();
             race._size = reader.GetShort();
             race.BonusPoints = reader.GetShort();
@@ -51,10 +57,14 @@ public static class MLoader
             guild.ExpFactor = reader.GetFloat();
             guild.Unused1 = reader.GetShort();
             for (int j = 0; j < guild.ReqStats.Length; j++)
+            {
                 guild.ReqStats[j] = reader.GetShort();
+            }
             guild.Alignment = reader.GetInt();
             for (int j = 0; j < guild.AbilityRates.Length; j++)
+            {
                 guild.AbilityRates[j] = reader.GetFloat();
+            }
             guild.Quested = reader.GetShort();
             guild.Unused2 = reader.GetFloat();
             guild.QuestPercentage = reader.GetShort();
@@ -66,10 +76,12 @@ public static class MLoader
                 spellClass.LevelScale = reader.GetFloat();
             }
             for (int j = 0; j < guild.SpellClasses.Capacity; j++)
+            {
                 guild.SpellClasses[j].LevelMax = reader.GetFloat();
+            }
             guild.RaceMask = reader.GetInt();
             guild.GoldFactor = reader.GetShort();
-            guild.LevelScale = reader.GetFloat();
+            guild.ItemFactor = reader.GetFloat();
             guild.Atk = reader.GetFloat();
             guild.Def = reader.GetFloat();
             guild.MaxAtkDefIncreaseLevel = reader.GetShort();
@@ -120,7 +132,9 @@ public static class MLoader
         reader.Read();
         spells.Version = reader.GetString();
         if (spells.Version != "1.1")
+        {
             throw new Exception("Invalid version");
+        }
         reader.Read();
         spells.Count = reader.GetShort();
         for (int i = 0; i < spells.Count; i++)
@@ -139,8 +153,10 @@ public static class MLoader
             s.Damage1 = reader.GetShort();
             s.Damage2 = reader.GetShort();
             s.SpecialEffect = reader.GetShort();
-            for (int j = 0; j < 7; j++) 
+            for (int j = 0; j < 7; j++)
+            {
                 s.RequiredStats[j] = reader.GetShort();
+            }
             s.ResistedBy = reader.GetShort();
             spells.SpellList.Add(s);
         }
@@ -154,7 +170,9 @@ public static class MLoader
         reader.Read();
         items.Version = reader.GetString();
         if (items.Version != "1.1")
+        {
             throw new Exception("Invalid version");
+        }
         reader.Read();
         items.GeneralStoreCode = reader.GetShort();
         reader.Read();
@@ -184,10 +202,14 @@ public static class MLoader
             item.Hands = reader.GetShort();
             item.Type = reader.GetShort();
             item._resistanceFlags = reader.GetInt();
-            for (int j = 0; j < item.Stats.Length; j++) 
+            for (int j = 0; j < item.Stats.Length; j++)
+            {
                 item.Stats[j] = reader.GetShort();
+            }
             for (int j = 0; j < item.StatsMod.Length; j++)
+            {
                 item.StatsMod[j] = reader.GetShort();
+            }
             item.Cursed = reader.GetShort();
             item.SpellLvl = reader.GetShort();
             item.ClassRestricted = reader.GetShort();
@@ -207,8 +229,10 @@ public static class MLoader
         while (true)
         {
             Character c = new();
-            if (!reader.Read()) 
+            if (!reader.Read())
+            {
                 break;
+            }
             c.Name = reader.GetString(30).Trim(); //0-29
             c.Race = reader.GetShort(); //30-31
             c.Alignment = reader.GetShort(); //32-33
@@ -269,7 +293,9 @@ public static class MLoader
                 held.ItemId = reader.GetShort();
             }
             for (int j = 0; j < c.EquippedItems.Length; j++) //1560-1631 (36*2)
+            {
                 c.EquippedItems[j] = reader.GetShort();
+            }
             c.UnusedDamageMod = reader.GetIntCurrency(); //1632-1639
             c.Unused1 = reader.GetShort(); //1640-1641
             c.Direction = reader.GetShort(); //1642-1643
@@ -313,7 +339,9 @@ public static class MLoader
             c.RezChance = reader.GetShort(); //2231-2232
             c.CharacterPerformingRez = reader.GetString(30); //2233-2262
             for (int j = 0; j < c.MiscCharacterInfo.Length; j++)
+            {
                 c.MiscCharacterInfo[j] = reader.GetIntCurrency();
+            }
             //0: kills 2263-2270
             //1: deaths 2271-2278
             //2: comp kills 2279-2286
@@ -324,14 +352,22 @@ public static class MLoader
             //7: unused 2319-2326
             //8: unused 2327-2334
             for (int j = 0; j < c.CharacterOptions.Length; j++) // 2335-2346 (6*2), unknown flags of some sort
+            {
                 c.CharacterOptions[j] = reader.GetShort();
+            }
             for (int j = 0; j < c.StatusEffects.Length; j++) //2347-2362(8*2)
+            {
                 c.StatusEffects[j] = reader.GetShort();
+            }
             for (int j = 0; j < c.Resistances.Length; j++) //2363-2386 (12*2)
+            {
                 c.Resistances[j] = reader.GetShort();
+            }
             c.TempBuffs = reader.GetInt(); //2387-2390
             for (int j = 0; j < c.TempResistances.Length; j++) //2391-2414 (12*2)
+            {
                 c.TempResistances[j] = reader.GetShort();
+            }
             c.DeadType = reader.GetShort(); //2415-2416
             c.CarriedCorpseID = reader.GetShort(); //2417-2418
             c.Password = reader.GetString(10); //2419-2428
@@ -349,12 +385,18 @@ public static class MLoader
             c.XpNeededToPin = reader.GetInt(); //2809-2812
             c.AbilitiesFromEquippedItems = reader.GetInt(); //2813-2816
             for (int j = 0; j < c.ResistsFromItems.Length; j++) //2817-2840 (12*2)
+            {
                 c.ResistsFromItems[j] = reader.GetShort();
+            }
             for (int j = 0; j < c.EquippedItemsInHands.Length; j++) //2841-2844 (2*2)
+            {
                 c.EquippedItemsInHands[j] = reader.GetShort();
+            }
             c.SomeADPlaceholderMaybe = reader.GetShort(); //2845-2846
             for (int j = 0; j < c.BufferSlots.Length; j++) //2847-2868 
+            {
                 c.BufferSlots[j] = reader.GetShort();
+            }
             c.CurrentAreaNum = reader.GetShort(); //2869-2870
             c.Unused3 = reader.GetShort(); //2871-2872
             c.Unused4 = reader.GetShort(); //2873-2874
@@ -362,7 +404,9 @@ public static class MLoader
             c.SanctuaryCoordinates.Y = reader.GetShort(); //2877-2878
             c.SanctuaryCoordinates.Level = reader.GetShort(); //2879-2880
             for (int j = 0; j < c.LocationAwareness.Length; j++) //2881-2886 (3*2)
+            {
                 c.LocationAwareness[j] = reader.GetShort();
+            }
             chars.CharacterList.Add(c);
         }
         return chars;
@@ -391,28 +435,36 @@ public static class MLoader
             m.PicID = reader.GetShort();
             m.LockedChance = reader.GetShort();
             m.LevelFound = reader.GetShort();
-            for (int j = 0; j < m.resistances.Length; j++) 
+            for (int j = 0; j < m.resistances.Length; j++)
+            {
                 m.resistances[j] = reader.GetShort();
+            }
             m._specialPropertyFlags = reader.GetInt();
             m._specialAttackFlags = reader.GetInt();
             m._spellFlags = reader.GetInt();
-            for (int j = 0; j < m.boxChance.Length; j++) 
+            for (int j = 0; j < m.boxChance.Length; j++)
+            {
                 m.boxChance[j] = reader.GetShort();
+            }
             reader.GetShort();
             m._alignment = reader.GetShort();
             m.GroupSize = reader.GetShort();
             m.GoldFactor = reader.GetInt();
             m.trapFlags = reader.GetInt();
             m.GuildLevel = reader.GetShort();
-            for (int j = 0; j < m.stats.Length; j++) 
+            for (int j = 0; j < m.stats.Length; j++)
+            {
                 m.stats[j] = reader.GetShort();
+            }
             m.MonsterType = reader.GetShort();
             m.DamageMod = reader.GetFloat();
             m.CompanionType = reader.GetShort();
             m.CompanionSpawnMode = reader.GetShort();
             m.CompanionID = reader.GetShort();
-            for (int j = 0; j < m.items.Length; j++) 
+            for (int j = 0; j < m.items.Length; j++)
+            {
                 m.items[j] = reader.GetShort();
+            }
             m.SimilarityID = reader.GetShort();
             m.CompanionGrouping = reader.GetShort();
             m._size = reader.GetShort();
@@ -436,11 +488,15 @@ public static class MLoader
         while (true)
         {
             StoreItem item = new();
-            if (!reader.Read()) 
+            if (!reader.Read())
+            {
                 break;
+            }
             short num = reader.GetShort();
-            if (num == 0) 
+            if (num == 0)
+            {
                 continue;
+            }
             item.RowNumber = num;
             item.ItemID = reader.GetShort();
             item.UnalignedQty = reader.GetShort();
@@ -461,8 +517,10 @@ public static class MLoader
         while (true)
         {
             Guildmaster guildmaster = new();
-            if (!reader.Read()) 
+            if (!reader.Read())
+            {
                 break;
+            }
             guildmaster.Name = reader.GetString();
             guildmaster.Level = reader.GetShort();
             guildmasters.GuildmasterList.Add(guildmaster);
@@ -491,7 +549,9 @@ public static class MLoader
                 for (short k = 1; k <= 30; k++)
                 {
                     if (!reader.Read())
+                    {
                         cont = false;
+                    }
                     MapTile tile = new()
                     {
                         X = k,
@@ -516,8 +576,10 @@ public static class MLoader
         {
             GuildLogEntry log = new();
             short? temp = reader.GetShortIfItExists();
-            if (temp == null) 
+            if (temp == null)
+            {
                 break;
+            }
             log.GuildID = temp.Value;
             log.DayValue = reader.GetInt();
             log.Message = reader.GetString();
@@ -542,7 +604,9 @@ public static class MLoader
         {
             AreaSpawn spawn = new();
             if (!reader.Read())
+            {
                 break;
+            }
             for (int i = 0; i < spawn.MonsterSpawns.Length; i++)
             {
                 MonsterSpawn monsterSpawn = new();
@@ -629,7 +693,9 @@ public static class MLoader
                 teleporter.y2 = reader.GetShort();
                 teleporter.z2 = reader.GetShort();
                 if (teleporter is { x: > 0, y: > 0 })
+                {
                     floor.Teleporters.Add(teleporter);
+                }
             }
             reader.Read();
             for (int j = 0; j < floor.ChuteCount; j++)
@@ -640,7 +706,9 @@ public static class MLoader
                 chute.y = reader.GetShort();
                 chute.Depth = reader.GetShort();
                 if (chute is { x: > 0, y: > 0 })
+                {
                     floor.Chutes.Add(chute);
+                }
             }
         }
         return dungeon;
@@ -657,12 +725,16 @@ public static class MLoader
             string?[] group = new string[4];
             for (int j = 0; j < 4; j++)
             {
-                if (!reader.Read()) 
+                if (!reader.Read())
+                {
                     break;
+                }
                 group[j] = reader.GetString();
             }
             if (group.Any(x => x != null))
+            {
                 groups.Groups.Add(group!);
+            }
         }
         return groups;
     }
@@ -689,7 +761,9 @@ public static class MLoader
             record.Known = reader.GetShort();
             record.NumSeen = reader.GetIntCurrency();
             if (record.NumSeen == 0)
+            {
                 continue;
+            }
             record.LastSeenBy = reader.GetString(30);
             record.MonsterID = reader.GetShort();
             record.LastSeenDay = reader.GetInt();
@@ -704,8 +778,10 @@ public static class MLoader
             record.ID = reader.GetShort();
             record.Known = reader.GetShort();
             record.NumSeen = reader.GetIntCurrency();
-            if (record.NumSeen == 0) 
+            if (record.NumSeen == 0)
+            {
                 continue;
+            }
             record.LastSeenBy = reader.GetString(30);
             record.MonsterID = reader.GetShort();
             record.LastSeenDay = reader.GetInt();
@@ -748,13 +824,14 @@ public static class MLoader
             ConfinementMonster monster = new();
             reader.Read();
             monster.RowNumber = reader.GetShort();
-            if (monster.RowNumber == 0)
-                continue;
-            monster.MonsterID = reader.GetShort();
-            monster.Good = reader.GetShort();
-            monster.Neutral = reader.GetShort();
-            monster.Evil = reader.GetShort();
-            conf.Monsters.Add(monster);
+            if (monster.RowNumber != 0)
+            {
+                monster.MonsterID = reader.GetShort();
+                monster.Good = reader.GetShort();
+                monster.Neutral = reader.GetShort();
+                monster.Evil = reader.GetShort();
+                conf.Monsters.Add(monster);
+            }
         }
         return conf;
     }

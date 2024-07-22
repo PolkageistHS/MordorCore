@@ -21,7 +21,9 @@ public class DATA13Library : IMordorDataFile
         {
             _totalMonsters = value;
             if (Monsters.Length == 0)
+            {
                 Monsters = new LibraryRecord[value];
+            }
         }
     }
 
@@ -34,11 +36,13 @@ public class DATA13Library : IMordorDataFile
         {
             _totalItems = value;
             if (Items.Length == 0)
+            {
                 Items = new LibraryRecord[value];
+            }
         }
     }
 
-    public LibraryRecord[] Monsters { get; set; } = { };
+    public LibraryRecord[] Monsters { get; set; } = [];
 
-    public LibraryRecord[] Items { get; set; } = { };
+    public LibraryRecord[] Items { get; set; } = [];
 }

@@ -1,0 +1,54 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<# 
+    const string folder = @"C:\Users\John\Downloads\MordorShared";
+    ReflectionRecordReader reader = new(folder);
+    DATA05Monsters monsters = reader.GetMordorRecord<DATA05Monsters>();
+    StringBuilder sbIds = new();
+    StringBuilder sbLoad = new();
+    PushIndent("    "); 
+    int i = 0;
+    foreach (Monster monster in monsters.MonstersList.OrderBy(monster => monster.ID)) 
+    {
+        string monsterName = ItemGenHelpers.RemoveBadCharacters(monster.Name);
+        WriteLine($"private static Monster {monsterName} => new()");
+        WriteLine("{");
+        PushIndent("    ");
+        WriteLine($"Name = \"{monster.Name}\",");
+        WriteLine($"Id = MonsterIds.{monsterName},");
+        WriteLine($"MonsterTypeId = new Guid(\"ItemSubtypeId{monster.MonsterType}\"),");
+        WriteLine($"Alignments = {ItemGenHelpers.GetStringFromInt(ItemGenCollections.MonsterAlignments, monster.Alignment)},");
+        WriteLine($"Attack = {monster.Attack},");
+        WriteLine($"Defense = {monster.Defense},");
+        WriteLine($"AverageHP = {monster.Hits},");
+        WriteLine($"GroupSize = {monster.GroupSize},");
+        WriteLine($"ImageId = {monster.PicID},");
+        WriteLine($"DungeonLevel = {monster.LevelFound},"); 
+        WriteLine($"Stats = ");
+        WriteLine("{");
+        PushIndent("    ");
+        Write(ItemGenHelpers.GetStatsFromArray(monster.Stats));
+        PopIndent();
+        WriteLine("},");
+        WriteLine($"Resistances = {ItemGenHelpers.GetResistsFromArray(monster.Resistances)}");
+        WriteLine($"ChestChance = {monster.BoxChance[0]},");
+        WriteLine($"Rarity = {monster.EncounterChance},");
+        WriteLine($"Gold = {monster.GoldFactor},");
+        WriteLine($"CompanionId = {monster.CompanionID},");
+        PopIndent();
+        WriteLine("};");
+        WriteLine("");
+        sbIds.AppendLine($"public const int {monsterName} = {i++};");
+        sbLoad.AppendLine($"yield return {monsterName};");
+    }
+    WriteLine("public IEnumerable<Monster> GetDefaultMonsters()");
+    WriteLine("{");
+    PushIndent("    ");
+    WriteLine(sbLoad.ToString());
+    PopIndent();
+    WriteLine("}");
+    WriteLine(sbIds.ToString());
+#>

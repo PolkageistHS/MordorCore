@@ -1,0 +1,46 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<# 
+    const string folder = @"C:\Users\John\Downloads\MordorShared";
+    ReflectionRecordReader reader = new(folder);
+    DATA02Spells spells = reader.GetMordorRecord<DATA02Spells>();
+    StringBuilder sbLoad = new();
+    PushIndent("    "); 
+    foreach (Spell spell in spells.Spells.OrderBy(spell => spell.ID)) 
+    {
+        string spellName = ItemGenHelpers.RemoveBadCharacters(spell.Name);
+        WriteLine($"private static Spell {spellName} => new()");
+        WriteLine("{");
+        PushIndent("    ");
+        WriteLine($"Name = \"{spell.Name}\",");
+        WriteLine($"Id = SpellIds.{spellName},");
+        WriteLine($"SpellCategory = new Guid(\"SpellTypeId{spell.Category}\"),");
+        WriteLine($"Level = {spell.Level},");
+        WriteLine($"Cost = {spell.Cost},");
+        WriteLine($"KillType = {spell.KillEffect},");
+        WriteLine($"GroupsAffected = {spell.AffectGroup},"); 
+        WriteLine($"MonstersAffected = {spell.AffectMonster},"); 
+        WriteLine($"Damage1 = {spell.Damage1},");
+        WriteLine($"Damage2 = {spell.Damage2},");
+        WriteLine($"RequiredStats = ");
+        WriteLine("{");
+        PushIndent("    ");
+        Write(ItemGenHelpers.GetStatsFromArray(spell.RequiredStats));
+        PopIndent();
+        WriteLine("},");
+        WriteLine($"ResistedBy = {spell.ResistedBy}");
+        PopIndent();
+        WriteLine("};");
+        WriteLine("");
+        sbLoad.AppendLine($"yield return {spellName};");
+    }
+    WriteLine("public IEnumerable<Spell> GetDefaultSpells()");
+    WriteLine("{");
+    PushIndent("    ");
+    WriteLine(sbLoad.ToString());
+    PopIndent();
+    WriteLine("}");
+#>

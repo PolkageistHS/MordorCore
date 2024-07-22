@@ -1,0 +1,62 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#
+    const string folder = @"C:\Users\John\Downloads\MordorShared";
+    ReflectionRecordReader reader = new(folder);
+    DATA03Items items = reader.GetMordorRecord<DATA03Items>();
+    StringBuilder sbIds = new();
+    StringBuilder sbLoad = new();
+    PushIndent("    "); 
+    foreach (Item item in items.ItemList.Where(item => item.SubtypeID is 23 or 24 or 25 or 26 or 27 or 28 or 30 or 31))
+    {
+        string itemName = ItemGenHelpers.RemoveBadCharacters(item.Name);
+        WriteLine($"private static Consumable {itemName} => new()");
+        WriteLine("{");
+        PushIndent("    ");
+        WriteLine($"Id = ItemIds.{itemName},");
+        WriteLine($"Name = \"{item.Name}\",");
+        WriteLine($"Rarity = {item.Rarity},");
+        WriteLine($"Floor = {item.Floor},");
+        WriteLine($"Value = {item.Price},");
+        WriteLine($"StackSize = {item.Charges},");
+        WriteLine($"ItemTypeId = new Guid(\"ItemSubtypeId{item.SubtypeID}\"),");
+        WriteLine($"SpellId = new Guid(\"SpellID{item.SpellID}\"),");
+        WriteLine($"SpellLevel = {item.SpellLvl},");
+        WriteLine($"ClassRestricted = {ItemGenHelpers.ConvertToBool(item.ClassRestricted)},");
+        WriteLine($"Alignments = {ItemGenHelpers.GetJoinedEnums(ItemGenCollections.Alignments, item.AlignmentFlags)},");
+        WriteLine($"AllowedGuilds = ");
+        WriteLine("{");
+        PushIndent("    ");
+        Write(ItemGenHelpers.GetMultiValues(ItemGenCollections.Guilds, item.Guilds));
+        PopIndent();
+        WriteLine("},");
+        WriteLine($"UsableLevelScale = {item.LevelScale},");
+        WriteLine($"RequiredStats = ");
+        WriteLine("{");
+        PushIndent("    ");
+        Write(ItemGenHelpers.GetStatsFromArray(item.MinimumStats));
+        PopIndent();
+        WriteLine("},");
+        WriteLine($"ModdedStats = ");
+        WriteLine("{");
+        PushIndent("    ");
+        Write(ItemGenHelpers.GetStatsFromArray(item.StatsMod));
+        PopIndent();
+        WriteLine("},");
+        PopIndent();
+        WriteLine("};");
+        WriteLine("");
+        sbIds.AppendLine($"public static Guid {itemName} => new(\"{Guid.NewGuid()}\");");
+        sbLoad.AppendLine($"yield return {itemName};");
+    }
+    WriteLine("public IEnumerable<Consumable> GetDefaultConsumables()");
+    WriteLine("{");
+    PushIndent("    ");
+    WriteLine(sbLoad.ToString());
+    PopIndent();
+    WriteLine("}");
+    WriteLine(sbIds.ToString());
+#>

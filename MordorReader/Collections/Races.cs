@@ -1,6 +1,3 @@
 ﻿namespace MordorReader;
 
-public class Races
-{
-	
-}
+public class Races;

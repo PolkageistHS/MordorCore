@@ -23,12 +23,8 @@ public class ReflectionRecordReader
 
     public T GetMordorRecord<T>() where T : class, IMordorDataFile
     {
-        Assembly.GetAssembly(typeof(T));
-        return (T)CreateClassObject(typeof(T));
-    }
-
-    private IMordorDataFile CreateClassObject(Type dataClass)
-    {
+        Type dataClass = typeof(T);
+        Assembly.GetAssembly(dataClass); //load the assembly into memory so the types can be found
         int dataRecordLength = dataClass.GetCustomAttribute<DataRecordLengthAttribute>()!.Length!.Value;
         int dataFileNum = int.Parse(dataClass.Name.Substring(4, 2));
         string filePath = Path.Combine(_folder, $"MDATA{dataFileNum}.MDR");
@@ -36,21 +32,25 @@ public class ReflectionRecordReader
             new DataFileReader(filePath) : 
             new DataFileReader(filePath, dataRecordLength);
         object instance = Activator.CreateInstance(dataClass)!;
-        GetByReflection(dataClass, instance, reader);
-        return (IMordorDataFile)instance;
+        GetByReflectionRecursive(dataClass, instance, reader);
+        return (T)instance;
     }
 
-    private void GetByReflection(Type dataClass, object instance, DataFileReader reader, bool autoRead = true)
+    private void GetByReflectionRecursive(Type dataClass, object instance, DataFileReader reader, bool autoRead = true)
     {
         PropertyInfo[] prop = dataClass.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-        foreach (PropertyInfo propertyInfo in prop.Where(info => info.GetCustomAttribute<SkipRecordAttribute>() == null))
+        foreach (PropertyInfo propertyInfo in prop.Where(info => info.GetCustomAttribute<SkipPropertyAttribute>() == null))
         {
             NewRecordAttribute? newRecord = propertyInfo.GetCustomAttribute<NewRecordAttribute>();
             Type propType = propertyInfo.PropertyType;
             if (autoRead && newRecord != null && !propType.IsArray)
+            {
                 reader.Read();
+            }
             if (_typeSetters.TryGetValue(propType, out Action<object, DataFileReader, PropertyInfo>? setters))
+            {
                 setters.Invoke(instance, reader, propertyInfo);
+            }
             else if (propType.IsArray)
             {
                 Array array = (Array?)propertyInfo.GetValue(instance) ?? throw new Exception();
@@ -58,12 +58,18 @@ public class ReflectionRecordReader
                 for (int i = 0; i < array.Length; i++)
                 {
                     if (newRecord != null)
+                    {
                         reader.Read();
+                    }
                     object subInstance = Activator.CreateInstance(elementType)!;
                     if (_primitiveSetters.TryGetValue(subInstance.GetType(), out Func<DataFileReader, object>? subSetters))
+                    {
                         subInstance = subSetters.Invoke(reader);
+                    }
                     else
-                        GetByReflection(elementType, subInstance, reader);
+                    {
+                        GetByReflectionRecursive(elementType, subInstance, reader);
+                    }
                     array.SetValue(subInstance, i);
                 }
                 propertyInfo.SetValue(instance, array);
@@ -77,15 +83,15 @@ public class ReflectionRecordReader
                 while (reader.Read())
                 {
                     object subInstance = Activator.CreateInstance(listType)!;
-                    GetByReflection(listType, subInstance, reader, false);
-                    addMethod.Invoke(listInstance, new[] { subInstance });
+                    GetByReflectionRecursive(listType, subInstance, reader, false);
+                    addMethod.Invoke(listInstance, [subInstance]);
                 }
                 propertyInfo.SetValue(instance, listInstance);
             }
             else
             {
                 object subInstance = Activator.CreateInstance(propType)!;
-                GetByReflection(propType, subInstance, reader);
+                GetByReflectionRecursive(propType, subInstance, reader);
                 propertyInfo.SetValue(instance, subInstance);
             }
         }
@@ -94,11 +100,11 @@ public class ReflectionRecordReader
     [DebuggerStepThrough]
     private void PopulateTypeSetters()
     {
-        _typeSetters[typeof(short)] = (obj, reader, propInfo) => propInfo.SetValue(obj, reader.GetShort());
-        _typeSetters[typeof(int)] = (obj, reader, propInfo) => propInfo.SetValue(obj, reader.GetInt());
-        _typeSetters[typeof(long)] = (obj, reader, propInfo) => propInfo.SetValue(obj, reader.GetIntCurrency());
-        _typeSetters[typeof(float)] = (obj, reader, propInfo) => propInfo.SetValue(obj, reader.GetFloat());
-        _typeSetters[typeof(string)] = (obj, reader, propInfo) =>
+        _typeSetters[typeof(short)] = [DebuggerStepThrough] (obj, reader, propInfo) => propInfo.SetValue(obj, reader.GetShort());
+        _typeSetters[typeof(int)] = [DebuggerStepThrough] (obj, reader, propInfo) => propInfo.SetValue(obj, reader.GetInt());
+        _typeSetters[typeof(long)] = [DebuggerStepThrough] (obj, reader, propInfo) => propInfo.SetValue(obj, reader.GetIntCurrency());
+        _typeSetters[typeof(float)] = [DebuggerStepThrough] (obj, reader, propInfo) => propInfo.SetValue(obj, reader.GetFloat());
+        _typeSetters[typeof(string)] = [DebuggerStepThrough] (obj, reader, propInfo) =>
         {
             FixedLengthStringAttribute? attr = propInfo.GetCustomAttribute<FixedLengthStringAttribute>();
             propInfo.SetValue(obj, attr == null ? reader.GetString() : reader.GetString(attr.Length));
@@ -108,9 +114,9 @@ public class ReflectionRecordReader
     [DebuggerStepThrough]
     private void PopulatePrimitiveTypeSetters()
     {
-        _primitiveSetters[typeof(short)] = reader => reader.GetShort();
-        _primitiveSetters[typeof(int)] = reader => reader.GetInt();
-        _primitiveSetters[typeof(long)] = reader => reader.GetIntCurrency();
-        _primitiveSetters[typeof(float)] = reader => reader.GetFloat();
+        _primitiveSetters[typeof(short)] = [DebuggerStepThrough] (reader) => reader.GetShort();
+        _primitiveSetters[typeof(int)] = [DebuggerStepThrough] (reader) => reader.GetInt();
+        _primitiveSetters[typeof(long)] = [DebuggerStepThrough] (reader) => reader.GetIntCurrency();
+        _primitiveSetters[typeof(float)] = [DebuggerStepThrough] (reader) => reader.GetFloat();
     }
 }

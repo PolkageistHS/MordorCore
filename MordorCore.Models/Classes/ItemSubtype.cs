@@ -6,4 +6,6 @@ public class ItemSubtype
     public string Name { get; set; } = null!;
 
     public short ItemType { get; set; }
+
+    public override string ToString() => Name;
 }

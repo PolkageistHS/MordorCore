@@ -3,7 +3,7 @@
 public static class StaticValues
 {
     public static readonly string[] SpellClasses =
-    {
+    [
         "Fire",
         "Cold",
         "Electric",
@@ -23,5 +23,5 @@ public static class StaticValues
         "Location",
         "Protection",
         "Unused"
-    };
+    ];
 }

@@ -1,0 +1,68 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#
+    const string folder = @"C:\Users\John\Downloads\MordorShared";
+    ReflectionRecordReader reader = new(folder);
+    DATA03Items items = reader.GetMordorRecord<DATA03Items>();
+    StringBuilder sbIds = new();
+    StringBuilder sbLoad = new();
+    PushIndent("    "); 
+    foreach (Item item in items.ItemList.Where(item => item.SubtypeID == 34))
+    {
+        string itemName = ItemGenHelpers.RemoveBadCharacters(item.Name);
+        WriteLine($"private static Sigil {itemName} => new()");
+        WriteLine("{");
+        PushIndent("    ");
+        WriteLine($"Id = ItemIds.{itemName},");
+        WriteLine($"Name = \"{item.Name}\",");
+        WriteLine($"Rarity = {item.Rarity},");
+        WriteLine($"Floor = {item.Floor},");
+        WriteLine($"Value = {item.Price},");
+        WriteLine($"AverageCharges = {item.Charges},");
+        WriteLine($"EquippedEffects = {ItemGenHelpers.GetJoinedEnums(ItemGenCollections.EquippedEffects, item.Abilities)},");
+        WriteLine($"ItemTypeId = new Guid(\"ItemSubtypeId{item.SubtypeID}\"),");
+        WriteLine($"SpellId = new Guid(\"SpellID{item.SpellID}\"),");
+        WriteLine($"SpellLevel = {item.SpellLvl},");
+        WriteLine($"Attack = {item.Attack},");
+        WriteLine($"Defense = {item.Defense},");
+        WriteLine($"ClassRestricted = {ItemGenHelpers.ConvertToBool(item.ClassRestricted)},");
+        WriteLine($"Cursed = {ItemGenHelpers.GetStringFromInt(ItemGenCollections.Cursed, item.Cursed)},");
+        WriteLine($"Alignments = {ItemGenHelpers.GetJoinedEnums(ItemGenCollections.Alignments, item.AlignmentFlags)},");
+        WriteLine($"Resists = {ItemGenHelpers.GetJoinedEnums(ItemGenCollections.Resists, item.ResistanceFlags)},");
+        WriteLine($"AllowedGuilds = ");
+        WriteLine("{");
+        PushIndent("    ");
+        Write(ItemGenHelpers.GetMultiValues(ItemGenCollections.Guilds, item.Guilds));
+        PopIndent();
+        WriteLine("},");
+        WriteLine($"UsableLevelScale = {item.LevelScale},");
+        WriteLine($"RequiredStats = ");
+        WriteLine("{");
+        PushIndent("    ");
+        Write(ItemGenHelpers.GetStatsFromArray(item.MinimumStats));
+        PopIndent();
+        WriteLine("},");
+        WriteLine($"ModdedStats = ");
+        WriteLine("{");
+        PushIndent("    ");
+        Write(ItemGenHelpers.GetStatsFromArray(item.StatsMod));
+        PopIndent();
+        WriteLine("},");
+        PopIndent();
+        WriteLine("};");
+        WriteLine("");
+        sbIds.AppendLine($"public static Guid {itemName} => new(\"{Guid.NewGuid()}\");");
+        sbLoad.AppendLine($"yield return {itemName};");
+        
+    }
+    WriteLine("public IEnumerable<Sigil> GetDefaultSigils()");
+    WriteLine("{");
+    PushIndent("    ");
+    WriteLine(sbLoad.ToString());
+    PopIndent();
+    WriteLine("}");
+    WriteLine(sbIds.ToString());
+#>

@@ -25,7 +25,9 @@ public class LibraryRecord
         get
         {
             if (LastSeenDay == 0)
+            {
                 return "Never";
+            }
             DateTime seenDate = new(1900, 1, 1);
             seenDate = seenDate.AddDays(LastSeenDay);
             TimeSpan diff = DateTime.Today - seenDate;
@@ -41,7 +43,9 @@ public class LibraryRecord
     public override string ToString()
     {
         if (MonsterID == 0)
+        {
             return $"MonsterID {ID} seen {NumSeen} times, last {LastSeenAt} {LastSeenDate}";
+        }
         return $"ItemID {ID} seen {NumSeen} times, last {LastSeenAt} {LastSeenDate} dropped by {(MonsterID == -1 ? "unknown" : MonsterID)}";
     }
 }

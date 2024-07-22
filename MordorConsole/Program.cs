@@ -1,7 +1,4 @@
-﻿using MordorCore.DAL;
-using MordorCore.Models.DataFiles;
-
-namespace MordorConsole;
+﻿namespace MordorConsole;
 
 internal static class Program
 {
@@ -9,6 +6,14 @@ internal static class Program
     private static void Main()
     {
         const string folder = @"C:\Users\John\Downloads\MordorShared";
+        //string? weapon = new WeaponGen().TransformText();
+        //string? armor = new ArmorGen().TransformText();
+        //string? consumables = new ConsumableGen().TransformText();
+        //string? accessories = new AccessoryGen().TransformText();
+        //string? sigils = new SigilGen().TransformText();
+        //string? ids = new OtherIdGen().TransformText();
+        //string? mons = new MonsterGen().TransformText();
+        //string? spelltext = new SpellGen().TransformText();
         ReflectionRecordReader reader = new(folder);
         DATA01GameData gamedata = reader.GetMordorRecord<DATA01GameData>();
         DATA02Spells spells = reader.GetMordorRecord<DATA02Spells>();

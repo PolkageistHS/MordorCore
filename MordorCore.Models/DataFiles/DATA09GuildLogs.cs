@@ -13,9 +13,11 @@ public class DATA09GuildLogs : IMordorDataFile
         {
             _count = value;
             if (Entries.Length == 0)
+            {
                 Entries = new GuildLogEntry[value];
+            }
         }
     }
 
-    public GuildLogEntry[] Entries { get; set; } = { };
+    public GuildLogEntry[] Entries { get; set; } = [];
 }

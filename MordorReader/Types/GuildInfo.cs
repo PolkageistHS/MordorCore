@@ -17,7 +17,7 @@ public class GuildInfo
     public List<SpellClass> SpellClasses = new(19);
     public int RaceMask;
     public short GoldFactor;
-    public float LevelScale;
+    public float ItemFactor;
     public float Atk;
     public float Def;
     public short MaxAtkDefIncreaseLevel;

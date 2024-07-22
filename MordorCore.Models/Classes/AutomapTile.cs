@@ -2,10 +2,10 @@
 
 public class AutomapTile
 {
-    [SkipRecord]
+    [SkipProperty]
     public short X { get; set; }
 
-    [SkipRecord]
+    [SkipProperty]
     public short Y { get; set; }
 
     [NewRecord]
